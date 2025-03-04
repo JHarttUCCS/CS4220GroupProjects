@@ -6,5 +6,13 @@
 CC = gcc
 CFLAGS = -O2 -Wall -I.
 
-build:
-	${CC} ${CFLAGS} server.c -o ../out/httpserver
+outdir = ../out
+
+httpserver: server.c
+	${CC} ${CFLAGS} $^ -o ${outdir}/$@
+
+.PHONY: clean
+
+clean:
+	rm -rf ${outdir}/*
+
