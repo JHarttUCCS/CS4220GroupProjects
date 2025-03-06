@@ -28,6 +28,9 @@ if (setsockopt(listening_socket, IPPROTO_IPV6, IPV6_V6ONLY, (void*)&option, size
 }
 */
 
+void handleConnection(int listening_socket){
+    puts("connection established");
+}
 
 int main(void)
 {
@@ -82,6 +85,9 @@ int main(void)
     {
         fprintf(stderr, "accept() failed. (%d)\n", GETSOCKETERRNO());
         return 1;
+    } else {
+        //code to process the connection
+        handleConnection(listening_socket);
     }
 
 
