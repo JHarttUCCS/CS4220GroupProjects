@@ -8,7 +8,12 @@ CFLAGS = -O2 -Wall -I.
 
 outdir = ../out
 
+all: httpserver httpclient
+
 httpserver: server.c
+	${CC} ${CFLAGS} $^ -o ${outdir}/$@
+
+httpclient: client.c
 	${CC} ${CFLAGS} $^ -o ${outdir}/$@
 
 .PHONY: clean
