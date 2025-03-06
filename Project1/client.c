@@ -3,7 +3,7 @@
 // CS4220.002
 // 04/17/2025
 
-#define PORT 80 // http port
+#define HTTP_PORT 80 // http port
 #define MAX_PENDING_CONNECTIONS 10
 
 
@@ -21,7 +21,7 @@ int main() {
     clientaddr.sin_family = AF_INET; // AF_INET means this is basically an IPv4 socket with a port #
     clientaddr.sin_addr.s_addr = htonl(INADDR_ANY); // htonl() converts a host integer to a
 													// network long (sometimes differnt byte order)
-    clientaddr.sin_port = htons(PORT); // htons() converts a host integer to a network 
+    clientaddr.sin_port = htons(HTTP_PORT); // htons() converts a host integer to a network 
 									   // short (sometimes differnt byte order)
 
     //open it
