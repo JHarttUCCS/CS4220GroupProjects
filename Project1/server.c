@@ -74,6 +74,9 @@ int main(void)
     {
         fprintf(stderr, "accept() failed. (%d)\n", GETSOCKETERRNO());
         return 1;
+    } else {
+        //code to process the connection
+        handleConnection(listening_socket);
     }
 
 
