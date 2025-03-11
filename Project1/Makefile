@@ -4,19 +4,26 @@
 # 04/17/2025
 
 CC = gcc
-CFLAGS = -O2 -Wall -I.
+CFLAGS = -O2 -Wall -I. -lssl -lcrypto
 
 outdir = ../out
 
-all: httpserver httpclient tls
+all: http tls
+
+http: httpserver httpclient
 
 httpserver: server.c
 	${CC} ${CFLAGS} $^ -o ${outdir}/$@
 
 httpclient: client.c
 	${CC} ${CFLAGS} $^ -o ${outdir}/$@
+
+tls: tlsserver tlsclient
 	
-tls: tls.c
+tlsserver: tls-server.c
+	${CC} ${CFLAGS} $^ -o ${outdir}/$@
+
+tlsclient: tls-client.c
 	${CC} ${CFLAGS} $^ -o ${outdir}/$@
 
 .PHONY: clean
