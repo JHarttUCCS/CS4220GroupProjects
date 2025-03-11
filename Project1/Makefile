@@ -20,10 +20,10 @@ httpclient: client.c
 
 tls: tlsserver tlsclient
 	
-tlsserver: tls-server.c
+tlsserver: tls/tls-server.c
 	${CC} ${CFLAGS} $^ -o ${outdir}/$@
 
-tlsclient: tls-client.c
+tlsclient: tls/tls-client.c
 	${CC} ${CFLAGS} $^ -o ${outdir}/$@
 
 .PHONY: clean
