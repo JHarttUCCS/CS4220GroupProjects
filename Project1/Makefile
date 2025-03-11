@@ -1,19 +1,22 @@
 # Jacob Hartt, Derin Rawson, Lea Karsanbhai
 # Serena Sullivan
 # CS4220.002
-# 05/09/2025
+# 04/17/2025
 
 CC = gcc
 CFLAGS = -O2 -Wall -I.
 
 outdir = ../out
 
-all: httpserver httpclient
+all: httpserver httpclient tls
 
 httpserver: server.c
 	${CC} ${CFLAGS} $^ -o ${outdir}/$@
 
 httpclient: client.c
+	${CC} ${CFLAGS} $^ -o ${outdir}/$@
+	
+tls: tls.c
 	${CC} ${CFLAGS} $^ -o ${outdir}/$@
 
 .PHONY: clean
