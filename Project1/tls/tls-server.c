@@ -10,6 +10,9 @@
 // #include <openssl/err.h>
 
 
+#include "tls-utils.h"
+
+
 int main() {
 	// Initialize SSL with no options, no settings
 	if (!OPENSSL_init_ssl(0, NULL)) {

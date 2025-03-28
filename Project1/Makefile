@@ -12,7 +12,7 @@ all: http tls
 
 http: httpserver httpclient
 
-httpserver: server.c
+httpserver: server.c 
 	${CC} ${CFLAGS} $^ -o ${outdir}/$@
 
 httpclient: client.c
@@ -20,11 +20,14 @@ httpclient: client.c
 
 tls: tlsserver tlsclient
 	
-tlsserver: tls/tls-server.c
+tlsserver: tls/tls-server.c ${outdir}/tlsutils.o
 	${CC} ${CFLAGS} $^ -o ${outdir}/$@
 
 tlsclient: tls/tls-client.c
 	${CC} ${CFLAGS} $^ -o ${outdir}/$@
+
+tlsutils.o: tls/tls-utils.c
+	${CC} ${CFLAGS} -c $^ -o ${outdir}/$@
 
 .PHONY: clean
 
