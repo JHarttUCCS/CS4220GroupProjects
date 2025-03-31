@@ -76,7 +76,7 @@ int main() {
 	// 	die("failed to init ssl");
 	// else
 	// 	printf("initialized ssl");
-	ssl_init("server.crt", "server.key");
+	ssl_init("tls/server.crt", "tls/server.key");
 
 	printf("TLS (Not)\n");
 
