@@ -15,8 +15,6 @@
 #include "tls-server.h"
 #include "tls-utils.h"
 
-#define PORT 55555
-
 
 int main() {
 	// // Initialize SSL with no options, no settings
@@ -28,7 +26,7 @@ int main() {
 	// }
 
 	char ip_str[INET_ADDRSTRLEN];
-	int port = PORT;
+	int port = 55555;
 
 	// Setup IPv4 streaming socket with default protocol
 	int serv_sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -81,8 +79,14 @@ int main() {
 	while (1) {
 		printf("waiting for next connction on port %d\n", port);
 
+		// Awaits connection
 		client_sock = accept(serv_sock, (struct sockaddr *) &peer_addr, &peer_addr_len);
 		if (client_sock < 0)
+			die("failed to accept connection on socket");
+		else
+			printf("accepted connection on client socket\n");
+
+		while (1) {} // temp holding pattern to test connection with client
 	}
 
 	return 0;

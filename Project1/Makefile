@@ -24,7 +24,7 @@ tls: tlsserver tlsclient
 tlsserver: tls/tls-server.c ${outdir}/tlsutils.o
 	${CC} ${CFLAGS} $^ -o ${outdir}/$@
 
-tlsclient: tls/tls-client.c
+tlsclient: tls/tls-client.c ${outdir}/tlsutils.o
 	${CC} ${CFLAGS} $^ -o ${outdir}/$@
 
 ${outdir}/tlsutils.o: tls/tls-utils.c
