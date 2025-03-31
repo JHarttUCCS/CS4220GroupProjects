@@ -10,3 +10,12 @@ Socket create_socket(Port port) {
 	return 42;
 }
 
+void die(const char *msg) {
+ 	perror(msg);
+	exit(1);
+}
+
+void ssl_init(const char *certfile, const char *keyfile) {
+	SSL_library_init();
+}
+

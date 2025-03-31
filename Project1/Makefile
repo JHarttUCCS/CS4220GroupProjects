@@ -7,6 +7,7 @@ CC = gcc
 CFLAGS = -O2 -Wall -I. -lssl -lcrypto
 
 outdir = ../out
+$(shell mkdir -p ${outdir})
 
 all: http tls
 
@@ -26,7 +27,7 @@ tlsserver: tls/tls-server.c ${outdir}/tlsutils.o
 tlsclient: tls/tls-client.c
 	${CC} ${CFLAGS} $^ -o ${outdir}/$@
 
-tlsutils.o: tls/tls-utils.c
+${outdir}/tlsutils.o: tls/tls-utils.c
 	${CC} ${CFLAGS} -c $^ -o ${outdir}/$@
 
 .PHONY: clean
