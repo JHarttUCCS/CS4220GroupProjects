@@ -78,7 +78,12 @@ int main() {
 	// 	printf("initialized ssl");
 	ssl_init("tls/server.crt", "tls/server.key");
 
-	printf("TLS (Not)\n");
+	while (1) {
+		printf("waiting for next connction on port %d\n", port);
+
+		client_sock = accept(serv_sock, (struct sockaddr *) &peer_addr, &peer_addr_len);
+		if (client_sock < 0)
+	}
 
 	return 0;
 }
