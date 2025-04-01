@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-#include <time.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -9,15 +8,23 @@
 #include <unistd.h>
 #include <errno.h>
 
+#include <openssl/crypto.h>
+#include <openssl/x509.h>
+#include <openssl/ssl.h>
+#include <openssl/pem.h>
+#include <openssl/err.h>
+
 #define ISVALIDSOCKET(s) ((s) >= 0)
 #define CLOSESOCKET(s) close(s)
 #define GETSOCKETERRNO() (errno)
 #define PORT "8080"
+#define BUFSIZE 1024
 
 
 void handleConnection(int listening_socket){
     puts("connection established");
 }
+
 
 int main(void)
 {
@@ -32,7 +39,10 @@ int main(void)
     loc_address.ai_flags = AI_PASSIVE;
 
     struct addrinfo *bind_address;
-    getaddrinfo(0, PORT, &loc_address, &bind_address);
+    if (getaddrinfo(0, PORT, &loc_address, &bind_address))
+    {
+        fprintf(stderr, "getaddrinfo() failed. (%d)\n", GETSOCKETERRNO());
+    }
 
 
     /* Create the listening socket that will accept new connections. */
@@ -46,7 +56,7 @@ int main(void)
         return 1;
     }
 
-    /* Use bind() to associate the socket with the address from getaddrinfo() */
+    /* Use bind() to associate the socket with the address from getaddrinfo(). */
     printf("Binding socket to local address...\n");
     if (bind(listening_socket, bind_address->ai_addr, bind_address->ai_addrlen))
     {
@@ -74,13 +84,19 @@ int main(void)
     {
         fprintf(stderr, "accept() failed. (%d)\n", GETSOCKETERRNO());
         return 1;
-    } else {
-        //code to process the connection
-        handleConnection(listening_socket);
     }
 
+    /* Read a message from the client. */
+    char buffer[BUFSIZE];
+    read(socket_client, buffer, BUFSIZE);
+    printf("Received message: %s\n", buffer);
 
-    //Close the client connection
+    /* Send a message to the client. */
+    char *reply = "Message from server: Hello \n";
+    send(socket_client, reply, strlen(reply), 0);
+
+
+    /* Close the client connection */
     printf("Closing connection...\n");
     CLOSESOCKET(socket_client);
 
