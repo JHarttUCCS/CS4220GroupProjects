@@ -55,3 +55,7 @@ void ssl_init(const char *certfile, const char *keyfile) {
 	SSL_CTX_set_options(ctx, SSL_OP_ALL|SSL_OP_NO_SSLv2|SSL_OP_NO_SSLv3);
 }
 
+
+void ssl_client_init(struct ssl_client *p, int fd, enum ssl_mode mode) {
+	return;
+}

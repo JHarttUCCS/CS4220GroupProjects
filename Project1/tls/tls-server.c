@@ -8,6 +8,7 @@
 
 // #include <openssl/bio.h>
 #include <arpa/inet.h>
+#include <openssl/bio.h>
 #include <openssl/ssl.h>
 // #include <openssl/err.h>
 
@@ -86,7 +87,9 @@ int main() {
 		else
 			printf("accepted connection on client socket\n");
 
-		while (1) {} // temp holding pattern to test connection with client
+		// ssl_client_init(&client, client_sock, SSLMODE_SERVER);
+
+		// while (1) {} // temp holding pattern to test connection with client
 	}
 
 	return 0;
