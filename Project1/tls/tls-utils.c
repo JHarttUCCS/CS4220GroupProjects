@@ -7,6 +7,7 @@
 
 
 SSL_CTX *ctx = NULL;  // Define it only here
+struct ssl_client client; // Define it here
 
 
 Socket create_socket(Port port) {	
@@ -16,6 +17,10 @@ Socket create_socket(Port port) {
 void die(const char *msg) {
  	perror(msg);
 	exit(1);
+}
+
+void print_unencrypted_data(char *buf, size_t len) {
+  printf("%.*s", (int)len, buf);
 }
 
 void ssl_init(const char *certfile, const char *keyfile) {
@@ -57,5 +62,25 @@ void ssl_init(const char *certfile, const char *keyfile) {
 
 
 void ssl_client_init(struct ssl_client *p, int fd, enum ssl_mode mode) {
-	return;
+	memset(p, 0, sizeof(struct ssl_client));
+
+	p->fd = fd;
+
+	p->rbio = BIO_new(BIO_s_mem());
+	p->wbio = BIO_new(BIO_s_mem());
+	p->ssl = SSL_new(ctx);
+
+	if (mode == SSLMODE_SERVER)
+		SSL_set_accept_state(p->ssl);
+	else if (mode == SSLMODE_CLIENT)
+		SSL_set_connect_state(p->ssl);
+
+	SSL_set_bio(p->ssl, p->rbio, p->wbio);
+
+	p->io_on_read = print_unencrypted_data;
+}
+
+
+int ssl_client_wants_write(struct ssl_client *client_p) {
+  return (client_p->write_len > 0);
 }

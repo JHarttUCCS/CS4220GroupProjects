@@ -37,9 +37,10 @@ struct ssl_client {
 
   const char *last_state; // store previous state string
 
-  // method to invoke when unencrypted bytes are available
+  // pointer to method to invoke when unencrypted bytes are available
   void (*io_on_read)(char *buf, size_t len);
-} client;
+};
+extern struct ssl_client client;
 
 
 // global ssl context (I don't like this)
@@ -50,7 +51,10 @@ Socket create_socket(Port port);
 
 void die(const char *msg);
 
+void print_unencrypted_data(char *buf, size_t len);
+
 void ssl_init(const char *certfile, const char *keyfile);
 
 void ssl_client_init(struct ssl_client *p, int fd, enum ssl_mode mode);
 
+int ssl_client_wants_write(struct ssl_client *client_p);

@@ -65,11 +65,11 @@ int main() {
 	struct sockaddr_in peer_addr;
 	socklen_t peer_addr_len = sizeof(peer_addr);
 
-	struct pollfd fd_set[2];
-	memset(&fd_set, 0, sizeof(fd_set)); // init fd_set to 0
+	struct pollfd poll_set[2]; // make a set of two polls
+	memset(&poll_set, 0, sizeof(poll_set)); // init fd_set to 0
 
-	fd_set[0].fd = STDIN_FILENO; // Set file descriptor to stdin
-	fd_set[0].events = POLLIN; // configure to read data
+	poll_set[0].fd = STDIN_FILENO; // Set first poll to stdin
+	poll_set[0].events = POLLIN; // configure to read data
 
 	// if (ssl_init("server.crt", "server.key") < 0)
 	// 	die("failed to init ssl");
@@ -87,9 +87,39 @@ int main() {
 		else
 			printf("accepted connection on client socket\n");
 
-		// ssl_client_init(&client, client_sock, SSLMODE_SERVER);
+		ssl_client_init(&client, client_sock, SSLMODE_SERVER);
 
-		// while (1) {} // temp holding pattern to test connection with client
+		// Wrtie peer address into ip_str and print it out
+		inet_ntop(peer_addr.sin_family, &peer_addr.sin_addr, ip_str, INET_ADDRSTRLEN);		
+		printf("new connection from %s:%d\n", ip_str, ntohs(peer_addr.sin_port));
+
+		// set second poll to client_sock
+		poll_set[1].fd = client_sock;
+
+		// === event loop ===
+		// configure events for all things
+    poll_set[1].events = POLLERR | POLLHUP | POLLNVAL | POLLIN;
+#ifdef POLLRDHUP
+    fd_set[1].events |= POLLRDHUP;
+#endif
+
+		while (1) { // temp holding pattern to test connection with client
+			poll_set[1].events &= ~POLLOUT; // Remove pollout from the events
+			poll_set[1].events |= (ssl_client_wants_write(&client) ? POLLOUT : 0); // if clients wants a write, add pollout back
+
+			// specify a poll to wait for data on the first socket, with two overall sockets, with no timeout
+			int n_ready = poll(&poll_set[0], 2, -1);
+
+			if (n_ready == 0)
+				continue; // no sockets are giving info
+			
+			// get the returned events from client and test to if (make sure the events and data line up
+			int revents = poll_set[1].revents;
+			// if (revents & POLLIN)
+			// 	if (do_sock_read() == -1)
+			// 		break;
+
+		}
 	}
 
 	return 0;
