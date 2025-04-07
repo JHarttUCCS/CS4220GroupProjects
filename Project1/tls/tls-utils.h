@@ -65,6 +65,9 @@ int ssl_client_wants_write(struct ssl_client *client_p);
 // read encrypted bytes from socket
 int enc_sock_read();
 
+// Write to encrypted socket
+int enc_sock_write();
+
 // read an encrypted charbuffer
 int read_enc_cb(char *src, size_t len);
 
@@ -79,3 +82,12 @@ enum ssl_status get_ssl_status(SSL* ssl, int n);
 
 // Add the new characters to the client's encrypt buffer, c-style
 void queue_encrypted_bytes(const char *buf, size_t len);
+
+// add data to encrypt_buf
+void send_unencrypted_bytes(const char *buf, size_t len);
+
+// read from stdin and queue for encyrption
+void stdin_read();
+
+// process queued data for encryption
+int encrypt();

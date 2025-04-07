@@ -98,6 +98,25 @@ int enc_sock_read() {
 		return -1;
 }
 
+int enc_sock_write() {
+	// write data to the socket
+	ssize_t n = write(client.fd, client.write_buf, client.write_len);
+
+	//  move the written remove the data from the buffer
+	if (n > 0) {
+		// if the number of chars to write is less than the lients write lenghts, move them into the write buffer from outside
+		if ((size_t) n < client.write_len)
+			memmove(client.write_buf, client.write_buf+n, client.write_len-n);
+		
+		client.write_len -= n;
+		client.write_buf = (char *) realloc(client.write_buf, client.write_len);
+		
+		return 0;
+	} else {
+		return -1;
+	}
+}
+
 
 int read_enc_cb(char *src, size_t len) {
 	char buf[DEFAULT_BUF_SIZE];
@@ -206,7 +225,63 @@ enum ssl_status get_ssl_status(SSL* ssl, int n)
 
 
 void queue_encrypted_bytes(const char *buf, size_t len) {
-	client.encrypt_buf = (char *) realloc(client.encrypt_buf, client.encrypt_len + len);
-	memcpy(client.encrypt_buf + client.encrypt_len, buf, len);
-	client.encrypt_len += len;
+	client.write_buf = (char *) realloc(client.write_buf, client.write_len + len);
+	memcpy(client.write_buf + client.write_len, buf, len);
+	client.write_len += len;
+}
+
+void send_unencrypted_bytes(const char *buf, size_t len) {
+  client.encrypt_buf = (char *) realloc(client.encrypt_buf, client.encrypt_len + len);
+  memcpy(client.encrypt_buf + client.encrypt_len, buf, len);
+  client.encrypt_len += len;
+}
+
+
+void stdin_read() {
+	char buf[DEFAULT_BUF_SIZE];
+
+	// Read bytes and send them
+	ssize_t n = read(STDIN_FILENO, buf, sizeof(buf));
+	if (n > 0)
+		send_unencrypted_bytes(buf, (size_t) n);
+}
+
+int encrypt() {
+	char buf[DEFAULT_BUF_SIZE];
+	enum ssl_status status;
+
+	if (!SSL_is_init_finished(client.ssl))
+		return 0;
+
+	// while there's stuff to encrypt
+	while (client.encrypt_len > 0) {
+		// perform actual encryption
+		int n = SSL_write(client.ssl, client.encrypt_buf, client.encrypt_len);
+		status = get_ssl_status(client.ssl, n);
+
+		if (n > 0) {
+			// consume waiting bytes
+			if ((size_t) n < client.encrypt_len)
+				memmove(client.encrypt_buf, client.encrypt_buf+n, client.encrypt_len-n);
+			client.encrypt_len -= n;
+			client.encrypt_buf = (char*)realloc(client.encrypt_buf, client.encrypt_len);
+		
+			// queue the encrypted data for socket write
+			do {
+				n = BIO_read(client.wbio, buf, sizeof(buf));
+				if (n > 0)
+					queue_encrypted_bytes(buf, n);
+				else if (!BIO_should_retry(client.wbio))
+					return -1;
+			} while (n > 0);
+		}
+		
+		if (status == SSLSTATUS_FAIL)
+			return -1;
+		
+		if (n == 0)
+			break;
+	}
+
+	return 0;
 }

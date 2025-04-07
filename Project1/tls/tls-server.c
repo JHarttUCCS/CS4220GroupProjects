@@ -118,7 +118,19 @@ int main() {
 			if (revents & POLLIN)
 				if (enc_sock_read() == -1)
 					break;
-
+			if (revents & POLLOUT)
+				if (enc_sock_write() == -1)
+					break;
+			if (revents & (POLLERR | POLLHUP | POLLNVAL))
+				break;
+#ifdef POLLRDHUP
+			if (revents & POLLRDHUP)
+				break;
+#endif
+			if (poll_set[0].revents & POLLIN)
+				stdin_read();
+			if (client.encrypt_len > 0)
+				encrypt();
 		}
 	}
 
