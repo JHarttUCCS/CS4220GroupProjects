@@ -84,3 +84,129 @@ void ssl_client_init(struct ssl_client *p, int fd, enum ssl_mode mode) {
 int ssl_client_wants_write(struct ssl_client *client_p) {
   return (client_p->write_len > 0);
 }
+
+
+int enc_sock_read() {
+	// Read data and get size of it
+	char buf[DEFAULT_BUF_SIZE];
+	ssize_t n = read(client.fd, buf, sizeof(buf));
+
+	// read encrypted data if buffer is greater than zero
+	if (n > 0)
+		return read_enc_cb(buf, (size_t)n);
+	else
+		return -1;
+}
+
+
+int read_enc_cb(char *src, size_t len) {
+	char buf[DEFAULT_BUF_SIZE];
+	enum ssl_status status;
+	int n;
+
+	while (len > 0) {
+		n = BIO_write(client.rbio, src, len);
+
+		// bio fails, return error
+		if (n <= 0)
+			return -1;
+
+		// iterate forward on the charbuffer
+		src += n;
+		len -= n;
+
+		// if ssl is not already initialized, attempt to initialize
+		if (!SSL_is_init_finished(client.ssl)) {
+			if (do_ssl_handshake() == SSLSTATUS_FAIL)
+				return -1;
+			if (!SSL_is_init_finished(client.ssl))
+				return 0;
+		}
+
+		// now that data is in the buffer, we can read the data
+
+		// read all bytes into buf 64 bytes at a time
+		do {
+			n = SSL_read(client.ssl, buf, sizeof(buf));
+			if (n > 0)
+				client.io_on_read(buf, (size_t)n);
+		} while (n > 0);
+
+		status = get_ssl_status(client.ssl, n);
+
+		// the ssl request may want to write bytes as well. happens rarely when the peer requests SSL renegotiation.
+		if (status == SSLSTATUS_WANT_IO) {
+			do {
+				n = BIO_read(client.wbio, buf, sizeof(buf));
+				if (n > 0)
+					queue_encrypted_bytes(buf, n);
+				else if (!BIO_should_retry(client.wbio))
+					return -1;
+			} while (n > 0);
+		}
+
+		if (status == SSLSTATUS_FAIL)
+			return -1;
+	}
+
+	return 0;
+}
+
+
+enum ssl_status do_ssl_handshake() {
+	char buf[DEFAULT_BUF_SIZE];
+	enum ssl_status status;
+
+	// do the actual handshake
+	print_ssl_state();
+	int n = SSL_do_handshake(client.ssl);
+	print_ssl_state();
+	status = get_ssl_status(client.ssl, n);
+
+	// if ssl requested write, queue up bytes until none left
+	if (status == SSLSTATUS_WANT_IO) {
+		do {
+			n = BIO_read(client.wbio, buf, sizeof(buf));
+			if (n > 0)
+				queue_encrypted_bytes(buf, n);
+			else if (!BIO_should_retry(client.wbio))
+				return SSLSTATUS_FAIL;
+		} while (n > 0);
+	}
+	
+	return status;
+}
+
+
+void print_ssl_state() {
+	const char *current_state = SSL_state_string_long(client.ssl);
+	if (current_state != client.last_state) {
+		if (current_state)
+			printf("SSL STATE: %s\n", current_state);
+		client.last_state = current_state;
+	}
+}
+
+
+enum ssl_status get_ssl_status(SSL* ssl, int n)
+{
+  switch (SSL_get_error(ssl, n))
+  {
+   case SSL_ERROR_NONE:
+    return SSLSTATUS_OK;
+   case SSL_ERROR_WANT_WRITE:
+   case SSL_ERROR_WANT_READ:
+    return SSLSTATUS_WANT_IO;
+   case SSL_ERROR_ZERO_RETURN:
+   case SSL_ERROR_SYSCALL:
+   default:
+    return SSLSTATUS_FAIL;
+  }
+}
+
+
+void queue_encrypted_bytes(const char *buf, size_t len) {
+	client.encrypt_buf = (char *) realloc(client.encrypt_buf, client.encrypt_len + len);
+	memcpy(client.encrypt_buf + client.encrypt_len, buf, len);
+	client.encrypt_len += len;
+}

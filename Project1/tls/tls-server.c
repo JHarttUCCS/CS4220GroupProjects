@@ -115,9 +115,9 @@ int main() {
 			
 			// get the returned events from client and test to if (make sure the events and data line up
 			int revents = poll_set[1].revents;
-			// if (revents & POLLIN)
-			// 	if (do_sock_read() == -1)
-			// 		break;
+			if (revents & POLLIN)
+				if (enc_sock_read() == -1)
+					break;
 
 		}
 	}
