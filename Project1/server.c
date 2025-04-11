@@ -50,7 +50,7 @@ int main(void)
 
 SOCKET create_socket(const char* host, const char *port)
 {
-    /* Find local address that web server should bind to. */
+    /* Find local address that server should bind to. */
     printf("Configuring local addresses...\n");
     struct addrinfo loc_address;
     memset(&loc_address, 0, sizeof(loc_address));
@@ -100,7 +100,7 @@ SOCKET create_socket(const char* host, const char *port)
 /* Receive and send data on the connection. */
 void handle_connection (SOCKET client_socket)
 {
-    // Read client request.
+    /* Read client request. */
     printf("Reading request...\n");
     char request[BUFSIZE];
     int bytes_received = recv(client_socket, request, BUFSIZE, 0);
@@ -116,7 +116,7 @@ void handle_connection (SOCKET client_socket)
     // Display request to the console.
     printf("%.*s", bytes_received, request);
 
-    // Server needs to respond back.
+    /* Respond to client from server. */
     printf("Sending response...\n");
     const char *response =
         "HTTP/1.1 200 OK\r\n"
