@@ -20,16 +20,23 @@ This program was developed to help us better understand how to apply security co
 
 A list of all the resources used:
 Baeldung. (2024, June 23). Creating a Self-Signed Certificate With OpenSSL. https://www.baeldung.com/openssl-self-signed-cert 
+
 Darrenjs. (n.d.). Darrenjs/openssl_examples: Examples of using openssl. GitHub. https://github.com/darrenjs/openssl_examples 
+
 Fielding, R., Gettys, J., Mogul, J., Frystyk, H., Masinter, L., Leach, P., & Berners-Lee, T. (1999, June). Hypertext transfer protocol -- HTTP/1.1. RFC Editor. https://www.rfc-editor.org/rfc/rfc2616 
+
 Hall, B. (n.d.). Beej’s Guide to Network Programming. https://beej.us/guide/bgnet/html/split/index.html 
+
 Khlebnikov, A., & Adolfsen, J. (2022). Demystifying Cryptography with OpenSSL 3.0. Packt Publishing, Limited. 
+
 Linux manual pages: Alphabetic list of all pages. (n.d.). https://man7.org/linux/man-pages/dir_all_alphabetic.html 
+
 Rescorla, E. (2000, May). HTTP over TLS. RFC Editor. https://www.rfc-editor.org/rfc/rfc2818 
+
 Tanenbaum, A. S., & Wetherall, D. (2011). Computer Networks. Pearson Prentice Hall. 
+
 Van Winkle, L. (2019). Hands-on network programming with C. Packt Publishing.
 
-![image](https://github.com/user-attachments/assets/12605b50-e223-4fb4-a0b0-98a80efb486c)
 
 
 ![image](https://github.com/user-attachments/assets/ac39fdbd-3ec7-428d-b3de-f65a5ae4930e)
