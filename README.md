@@ -36,7 +36,3 @@ Rescorla, E. (2000, May). HTTP over TLS. RFC Editor. https://www.rfc-editor.org/
 Tanenbaum, A. S., & Wetherall, D. (2011). Computer Networks. Pearson Prentice Hall. 
 
 Van Winkle, L. (2019). Hands-on network programming with C. Packt Publishing.
-
-
-
-![image](https://github.com/user-attachments/assets/ac39fdbd-3ec7-428d-b3de-f65a5ae4930e)
