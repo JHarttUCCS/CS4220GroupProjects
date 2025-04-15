@@ -28,12 +28,7 @@ int main() {
     char *tcpbuff = (char*) malloc(10000);
 
     //GET seg string 
-    strcpy(tcpbuff, "GET  / HTTP/1.1\r\n";
-        "Host: 127.0.0.1:8000\r\n";
-        "User-Agent: SimpleHttpClient/1.0\r\n";
-        "Accept: text/html\r\n";
-        "Accept-Language:en-US\r\n";
-        "Accept-Encoding: identity\r\n\r\n");
+    strcpy(tcpbuff, "GET  / HTTP/1.1\r\n Host: 127.0.0.1:8000\r\nUser-Agent: SimpleHttpClient/1.0\r\nAccept: text/html\r\nAccept-Language:en-US\r\nAccept-Encoding: identity\r\n\r\n");
     
     //send it and zero
     write(listensock, tcpbuff, 10000);

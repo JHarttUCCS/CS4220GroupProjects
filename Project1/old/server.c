@@ -8,10 +8,6 @@
 #include <errno.h>
 #include <stdlib.h>
 
-#include <arpa/inet.h>
-#include <openssl/bio.h>
-#include <openssl/ssl.h>
-
 #define ISVALIDSOCKET(s) ((s) >= 0)
 #define CLOSESOCKET(s) close(s)
 #define GETSOCKETERRNO() (errno)
@@ -26,22 +22,6 @@ void handle_connection (SOCKET socket_client);
 int main(void)
 {
     SOCKET listen_socket = create_socket(0, PORT);
-
-    //initialize OpenSSL
-    SSL_library_init();
-	OpenSSL_add_all_algorithms();
-	SSL_load_error_strings();
-    SSL_CTX *sslctx = SSL_CTX_new(TLS_method());
-    if(sslctx == NULL) {
-        fprintf(stderr, "%s", "Failed to intialize OpenSSL. SSL context returned NULL\n");
-        return -1;
-    }
-    //SSL_CTX_set_min_proto_version
-    
-    if (SSL_CTX_use_certificate_file(sslctx, "keys/server.crt", SSL_FILETYPE_PEM) != 1) {
-        fprintf(stderr, "%s", "Failed to load keys\n");
-        return 1;
-    }
 
     /* Accept any incoming connection. */
     printf("Waiting for connection...\n");
