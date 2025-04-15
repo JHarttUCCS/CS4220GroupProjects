@@ -13,11 +13,11 @@
 #define GETSOCKETERRNO() (errno)
 #define PORT "8080"
 #define BUFSIZE 1024
+
 typedef int SOCKET;
 
 SOCKET create_socket(const char* host, const char *port);
 void handle_connection (SOCKET socket_client);
-
 
 int main(void)
 {
@@ -35,7 +35,37 @@ int main(void)
         return 1;
     }
 
-    handle_connection(socket_client);
+    /* Read client request. */
+    printf("Reading request...\n");
+    char request[BUFSIZE];
+    int bytes_received = recv(socket_client, request, BUFSIZE, 0);
+
+    // Check that recv() > 0
+    if (bytes_received <= 0)
+    {
+        fprintf(stderr, "recv() failed. (%d)\n", GETSOCKETERRNO());
+        exit(1);
+    }
+
+    // Detect if an HTTP header has been received.
+    else
+    {
+        request[bytes_received] = 0;
+        char *q = strstr(request, "\r\n\r\n");
+        if (q)
+        {
+            // Ensure that it is a GET request.
+            if (strncmp("GET /", request, 5))
+            {
+                fprintf(stderr, "Bad request. (%s)\n", request);
+                exit(1);
+            }
+
+            // Rend message back to client.
+            handle_connection(socket_client);
+        }
+    }
+
 
     //Close the client connection
     printf("Closing connection...\n");
@@ -100,22 +130,6 @@ SOCKET create_socket(const char* host, const char *port)
 /* Receive and send data on the connection. */
 void handle_connection (SOCKET client_socket)
 {
-    /* Read client request. */
-    printf("Reading request...\n");
-    char request[BUFSIZE];
-    int bytes_received = recv(client_socket, request, BUFSIZE, 0);
-
-    // Check that recv() > 0
-    if (bytes_received <= 0)
-    {
-        fprintf(stderr, "recv() failed. (%d)\n", GETSOCKETERRNO());
-        exit(1);
-    }
-    printf("Received %d bytes. \n", bytes_received);
-
-    // Display request to the console.
-    printf("%.*s", bytes_received, request);
-
     /* Respond to client from server. */
     printf("Sending response...\n");
     const char *response =
