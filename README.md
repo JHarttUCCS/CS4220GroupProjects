@@ -3,6 +3,7 @@ CS4220 Group Projects
 
 ## Project 1
 Group Members: Jake Hartt, Darin Rawson, Lea Karsanbhai
+
 We/I have neither given nor received unauthorized assistance on this work
 
 ### Program Description
