@@ -132,7 +132,18 @@ int main() {
 			if (client.encrypt_len > 0)
 				encrypt();
 		}
+
+		close(poll_set[1].fd);
+		ssl_client_cleanup(&client);
 	}
 
 	return 0;
+}
+
+
+void ssl_client_cleanup(struct ssl_client *p)
+{
+  SSL_free(p->ssl); // free the ssl object
+  free(p->write_buf); // free the write buffer
+  free(p->encrypt_buf); // free the encrypt buffer
 }

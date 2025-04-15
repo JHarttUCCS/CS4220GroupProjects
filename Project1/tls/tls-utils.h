@@ -91,3 +91,6 @@ void stdin_read();
 
 // process queued data for encryption
 int encrypt();
+
+// cleanup client struct
+void ssl_client_cleanup(struct ssl_client *p);
