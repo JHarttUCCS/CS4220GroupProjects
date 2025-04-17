@@ -20,7 +20,7 @@ This program was developed to help us better understand how to apply security co
 ### Notes (about resources used)
 [This project](https://github.com/darrenjs/openssl_examples) inspired much of the TLS code in the project.
 
-A list of all the resources used:
+#### A list of all the resources used (APA):
 
 Baeldung. (2024, June 23). Creating a Self-Signed Certificate With OpenSSL. https://www.baeldung.com/openssl-self-signed-cert 
 
