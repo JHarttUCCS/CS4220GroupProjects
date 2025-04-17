@@ -4,7 +4,7 @@ CS4220 Group Projects
 ## Project 1
 Group Members: Jake Hartt, Darin Rawson, Lea Karsanbhai
 
-We/I have neither given nor received unauthorized assistance on this work
+We/I have neither given nor received unauthorized assistance on this work.
 
 ### Program Description
 This program was developed to help us better understand how to apply security concepts in networking, especially with protocols like TLS and SSL. This can help us learn more about how we can protect information that is sent over a network. The information between a web server and client must be both encrypted and authenticated to help protect user information, and creating this network allows us to see how this is done. We can see potential risks for security, especially since private information is often sent over the internet, so it is important to ensure that we are keeping that data safe when it is transmitted. The scenario we are working with in this project is the idea of having a web browser (client) accessing a website (server) that they must share private information with, such as a credit card number, so we must allow for a secure transmission. We want this information to be secure and not be able to be read by a malicious actor, so we must implement secure practices to protect the information.
@@ -25,7 +25,7 @@ This program was developed to help us better understand how to apply security co
 ### Notes (about resources used)
 [This project](https://github.com/darrenjs/openssl_examples) inspired much of the TLS code in the project.
 
-Additionally, to learn more about network programming to create the initial HTTP server code, the main resources used were *Hands-on network programming with C* and *Beej's Guide to Network Programming: Using Internet Sockets*. These helped with getting an understanding of the primary functions that would be used in the server code as well as the general layout an HTTP server must have. *Beej's Guide to Network Programming: Using Internet Sockets* helped to get a better understanding of sockets and TCP while *Hands-on network programming with C* helped with learning the functions that should be used to create an HTTP server.![image](https://github.com/user-attachments/assets/ea751201-efe5-49be-a9a4-cab2ae5dfac3)
+Additionally, to learn more about network programming to create the initial HTTP server code, the main resources used were *Hands-on network programming with C* and *Beej's Guide to Network Programming: Using Internet Sockets*. These helped with getting an understanding of the primary functions that would be used in the server code as well as the general layout an HTTP server must have. *Beej's Guide to Network Programming: Using Internet Sockets* helped to get a better understanding of sockets and TCP while *Hands-on network programming with C* helped with learning the functions that should be used to create an HTTP server.
 
 
 #### List of Resources Used (APA):
