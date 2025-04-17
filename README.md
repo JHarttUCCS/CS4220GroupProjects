@@ -11,13 +11,14 @@ This program was developed to help us better understand how to apply security co
 
 ### How to Run the Program
 
-
 ### Pieces of the Assignment (with a brief description)
 
 ### Challenges (Problems encountered and how they were solved and what you learned)
+1. When designing the TLS client, we originally miswrote which buffer we were writing to, and got the buffers confused.  This was another way of learning how context-sensitive everything around our operations is.
+2. When building the Makefile, we noticed that we could not build the OpenSSL code with a default set up.   In the end, we had to add custom SSL flags to the compiler to get it to compile SSL code, just like you would with something like _GNU_SOURCE.
 
 ### Notes (about resources used)
-[This project](https://github.com/darrenjs/openssl_examples) inspired much of the TLS code in the project
+[This project](https://github.com/darrenjs/openssl_examples) inspired much of the TLS code in the project.
 
 A list of all the resources used:
 
