@@ -11,19 +11,31 @@ This program was developed to help us better understand how to apply security co
 
 
 ### How to Run the Program
-#### Server
 1. Navigate to `CS4220GroupProjects/Project1`
 2. Run `make`
 3. Run the server with `../out/httpserver`
-
-#### Client
-1. Navigate to `CS4220GroupProjects/Project1`
-2. Run `make`
-3. Run the client with `../out/httpclient`
-4. You should see the returned text from http.
+4. Open another terminal on the same machine.
+5. Navigate to `CS4220GroupProjects/Project1`
+6. Run the client with `../out/httpclient`
+7. You should see the returned text from http:
+> Hello from the HTTPS server!
 
 
 ### Pieces of the Assignment (with a brief description)
+##### Keys
+These are the TLS certificate and key generated for use in our project.  Since this is a school project, there is no harm in uploading the authentication information here.
+
+##### Makefile
+The makefile builds the code and outputs it to the project's `out` folder.
+
+##### Server
+The server sets up a TLS+HTTP connection and listens for a secure TLS connection.  When one is recieved, it sends a simple message and then closes.
+
+##### Client
+The server establishe a TLS+HTTP connection with the server and recieves its message before printing it out and terminating.
+
+##### Legacy Code
+The `old` and `openssl_experiment` folders contain our initial code as we were figuring out how to program http and TLS respectively.  This code was vital in our final product, and was much of it was repurposed in the final code.
 
 
 ### Challenges
