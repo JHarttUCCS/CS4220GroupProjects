@@ -12,7 +12,7 @@ This program was developed to help us better understand how to apply security co
 
 ### How to Run the Program
 1. Navigate to `CS4220GroupProjects/Project1`
-2. Run `make`
+2. Run `make all`
 3. Run the server with `../out/httpserver`
 4. Open another terminal on the same machine.
 5. Navigate to `CS4220GroupProjects/Project1`
