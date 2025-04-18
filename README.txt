@@ -12,7 +12,7 @@ This program was developed to help us better understand how to apply security co
 
 ### How to Run the Program
 1. Navigate to `CS4220GroupProjects/Project1`
-2. Run `make`
+2. Run `make all`
 3. Run the server with `../out/httpserver`
 4. Open another terminal on the same machine.
 5. Navigate to `CS4220GroupProjects/Project1`
@@ -43,6 +43,7 @@ The `old` and `openssl_experiment` folders contain our initial code as we were f
 2. When building the Makefile, we noticed that we could not build the OpenSSL code with a default set up.   In the end, we had to add custom SSL flags to the compiler to get it to compile SSL code, just like you would with something like _GNU_SOURCE.
 3. While creating the HTTP server, an initial problem encountered was being unfamiliar with network programming and the various predefined functions that could be used. I was not sure where to start and was unfamiliar with the various components of an HTTP server. However, I was able to solve this by researching the HTTP protocol before I started writing any code. I initially learned about Transmission Control Protocol (TCP) and User Datagram Protocol (UDP) as well as sockets. The main resources I used to get this initial knowledge were *Hands-on network programming with C* and *Beej's Guide to Network Programming: Using Internet Sockets*. Through these resources, I learned that TCP would be used to create the HTTP server because it is a connection-oriented protocol, so it provides things like ensuring that data arrives in the same order that it was sent in, avoiding identical data from arriving more than once, and resending missing data. I also learned about the various socket functions that are often used in socket programming that would help create the HTTP server. With this knowledge, I started to look more at the structure of a general TCP program, and then began applying this to create an HTTP server.
 4. One of the challenges faced while creating the HTTP server was with error handling. Since the server only handles GET requests, there is an error check to ensure that the client’s request is a GET request. However, there was not proper error checking to handle this, so the program would run even when the client was not using a GET request. To fix this, we had to add an exit statement if the request by the client was not a GET request.
+5. Implementing HMAC was surprisingly simple.  Originally, we attempted to implement a bespoke HMAC solution by manually transmitting an HMAC tag on top of the default hash in the ciphersuite.  However, it turned out all we needed to do was specify a specific ciphersuite that uses HMAC to achieve HMAC implementation.  https://ciphersuite.info/cs/TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384/
 
 
 ### Notes
@@ -68,6 +69,8 @@ Linux manual pages: Alphabetic list of all pages. (n.d.). https://man7.org/linux
 OpenSSL Documentation. (n.d.). https://docs.openssl.org/3.2/ 
 
 Rescorla, E. (2000, May). HTTP over TLS. RFC Editor. https://www.rfc-editor.org/rfc/rfc2818 
+
+Rudolph, H. C., & Grundmann, N. (n.d.). Weak TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384. Ciphersuite Info. https://ciphersuite.info/cs/TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384/ 
 
 Tanenbaum, A. S., & Wetherall, D. (2011). Computer Networks. Pearson Prentice Hall. 
 
