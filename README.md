@@ -11,6 +11,16 @@ This program was developed to help us better understand how to apply security co
 
 
 ### How to Run the Program
+#### Server
+1. Navigate to `CS4220GroupProjects/Project1`
+2. Run `make`
+3. Run the server with `../out/httpserver`
+
+#### Client
+1. Navigate to `CS4220GroupProjects/Project1`
+2. Run `make`
+3. Run the client with `../out/httpclient`
+4. You should see the returned text from http.
 
 
 ### Pieces of the Assignment (with a brief description)
