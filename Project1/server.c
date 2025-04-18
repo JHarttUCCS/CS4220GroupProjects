@@ -10,6 +10,8 @@
 
 #include <arpa/inet.h>
 #include <openssl/bio.h>
+#include <openssl/evp.h>
+#include <openssl/params.h>
 #include <openssl/ssl.h>
 
 #define ISVALIDSOCKET(s) ((s) >= 0)
@@ -38,6 +40,9 @@ int main(void)
         puts("Loaded OpenSSL");
     }
 
+    // Specify an HMAC cipher suite https://ciphersuite.info/cs/TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384/
+    SSL_CTX_set_cipher_list(sslctx, "ECDHE-RSA-AES256-SHA384");
+
     if(SSL_CTX_set_min_proto_version(sslctx, TLS1_2_VERSION) != 1) {
         fprintf(stderr, "%s", "Failed to set min TLS to 1.2\n");
         return -1;
@@ -60,9 +65,9 @@ int main(void)
     //fireup SSL
     SSL *sslclient = SSL_new(sslctx);
 
+
     //establish socket connection
     SOCKET listen_socket = create_socket(0, PORT);
-
 
     /* Accept any incoming connection. */
     printf("Waiting for connection...\n");
@@ -103,7 +108,7 @@ int main(void)
     char *q = strstr(request, "\r\n\r\n");
     if (q)
     {
-            // Ensure that it is a GET request.
+        // Ensure that it is a GET request.
         if (strncmp("GET /", request, 5))
         {
             fprintf(stderr, "Bad request. (%s)\n", request);

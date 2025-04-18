@@ -32,6 +32,9 @@ int main() {
         return -1;
     }
 
+    // Specify an HMAC cipher suite https://ciphersuite.info/cs/TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384/
+    SSL_CTX_set_cipher_list(sslctx, "ECDHE-RSA-AES256-SHA384");
+
     //fireup SSL
     SSL *sslclient = SSL_new(sslctx);
 
